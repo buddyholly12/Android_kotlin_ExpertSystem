@@ -22,4 +22,5 @@
     <string name="Olaharaga1">Rutin</string>
     <string name="Olaharaga2">Jarang</string>
     <string name="Olaharaga3">Tidak pernah </string>
+    <string name="if1">Jika ya ,Masukkan jumlah </string>
 </resources>
