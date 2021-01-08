@@ -123,26 +123,16 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:text="TextView" />
-
-                <RadioGroup
+                <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp">
+                    android:layout_marginEnd="16dp"
+                    android:hint="@string/gender"
+                    android:id="@+id/Gender"></EditText>
 
-                    <RadioButton
-                        android:id="@+id/radioButton4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/A4" />
 
-                    <RadioButton
-                        android:id="@+id/radioButton5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/A5" />
-                </RadioGroup>
 
                 <Space
                     android:layout_width="match_parent"
@@ -166,7 +156,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:hint="@string/tinggi"
-                    android:inputType="number"></EditText>
+                    android:inputType="number"
+                    android:id="@+id/tinggibadan"></EditText>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -175,7 +166,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:hint="@string/beratbadan"
-                    android:inputType="number"></EditText>
+                    android:inputType="number"
+                    android:id="@+id/beratbadan"></EditText>
 
                 <TextView
                     android:id="@+id/question6"
