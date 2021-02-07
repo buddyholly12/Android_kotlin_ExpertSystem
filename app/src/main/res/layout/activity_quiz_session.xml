@@ -75,7 +75,8 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
-                    android:hint="@string/Ldl">
+                    android:hint="@string/Ldl"
+                    android:maxLength="3">
 
                 </EditText>
 
@@ -101,13 +102,14 @@
                     android:layout_marginBottom="20dp" />
 
                 <EditText
+                    android:id="@+id/Tensi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:hint="@string/tensi"
-                    android:id="@+id/Tensi"></EditText>
+                    android:maxLength="3"></EditText>
 
                 <Space
                     android:layout_width="match_parent"
@@ -123,14 +125,29 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:text="TextView" />
-                <EditText
+                <RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
-                    android:hint="@string/gender"
-                    android:id="@+id/Gender"></EditText>
+                    android:id="@+id/Rggender">
+
+                    <RadioButton
+                        android:id="@+id/radioButton4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/A4" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/A5" />
+                </RadioGroup>
+
+
+
 
 
 
@@ -150,6 +167,7 @@
                     android:text="TextView" />
 
                 <EditText
+                    android:id="@+id/tinggibadan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -157,9 +175,11 @@
                     android:layout_marginEnd="16dp"
                     android:hint="@string/tinggi"
                     android:inputType="number"
-                    android:id="@+id/tinggibadan"></EditText>
+                    android:maxLength="3"
+                    android:maxLines="1"></EditText>
 
                 <EditText
+                    android:id="@+id/beratbadan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -167,7 +187,7 @@
                     android:layout_marginEnd="16dp"
                     android:hint="@string/beratbadan"
                     android:inputType="number"
-                    android:id="@+id/beratbadan"></EditText>
+                    android:maxLength="3"></EditText>
 
                 <TextView
                     android:id="@+id/question6"
@@ -243,13 +263,15 @@
                     android:text="TextView" />
 
                 <EditText
+                    android:id="@+id/Umur"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:hint="@string/umur"
-                    android:inputType="number"></EditText>
+                    android:inputType="number"
+                    android:maxLength="3"></EditText>
 
                 <TextView
                     android:id="@+id/question9"
