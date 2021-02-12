@@ -6,8 +6,8 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.rangeTo
-import com.fileskripsi.skripsi_without_login.AnswerSheets
-import com.fileskripsi.skripsi_without_login.Cf_Class
+import androidx.core.util.toRange
+import com.fileskripsi.skripsi_without_login.*
 import com.fileskripsi.skripsi_without_login.R
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_quiz_session.*
@@ -29,6 +29,10 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
     lateinit var genderradio1: RadioButton
     private lateinit var answerSheets1: MutableList<AnswerSheets>
     private lateinit var CF_list: MutableList<Cf_Class>
+    private lateinit var CF_Data: MutableList<Cf_hitung>
+    private lateinit var CF_Data1: MutableList<Cf_hitung>
+    private lateinit var CF_Data2: MutableList<Cf_hitung>
+    private lateinit var Cf_user: MutableList<nlist>
     private lateinit var berat_badan: EditText
     private lateinit var tinggi_badan: EditText
     private lateinit var Data_umur: EditText
@@ -42,6 +46,10 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         // dbRef = database1?.reference!!.child("Data_Jawaban")
         answerSheets1 = mutableListOf()
         CF_list = mutableListOf()
+        CF_Data = mutableListOf()
+        CF_Data1 = mutableListOf()
+        CF_Data2 = mutableListOf()
+        Cf_user = mutableListOf()
         Submit = findViewById(R.id.Submitbutton)
         jumlahbtg = findViewById(R.id.jumlah)
         LDl = findViewById(R.id.ldl_score)
@@ -123,6 +131,7 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
 
     }
 
+
     private fun answerSheets_data() {
         jumlahbtg = findViewById(R.id.jumlah)
         LDl = findViewById(R.id.ldl_score)
@@ -136,15 +145,32 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         var dbansw = ""
         var data: Double
         var data1: Double
-        var dataCombine :Double
-        var dataCombine1 :Double
-        var dataCombine2 :Double
-        var dataCombine3 :Double
-        var dataCombine4 :Double
-        var dataCombine5 :Double
-        var dataCombine6 :Double
-        var dataCombine7 :Double
-        var dataCombine8 :Double
+        var data2: Double
+        var dataCombine: Double
+        var dataCombine1: Double
+        var dataCombine2: Double
+        var dataCombine3: Double
+        var dataCombine4: Double
+        var dataCombine5: Double
+        var dataCombine6: Double
+        var dataCombine7: Double
+        var dataCombine8: Double
+        var dataCombine9: Double
+        var dataCombine10: Double
+        var dataCombine11: Double
+        var dataCombine12: Double
+        var dataCombine13: Double
+        var dataCombine14: Double
+        var dataCombine15: Double
+        var dataCombine16: Double
+        var dataCombine17: Double
+        var dataCombine18: Double
+        var dataCombine19: Double
+        var dataCombine20: Double
+        var dataCombine21: Double
+        var dataCombine22: Double
+        var dataCombine23: Double
+        var dataCombine24: Double
         val result = StringBuilder()
         val result1 = StringBuilder()
         val result2 = StringBuilder()
@@ -152,11 +178,11 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         val result4 = StringBuilder()
         val ref = FirebaseDatabase.getInstance().getReference("User_ans")
         val nlistcfcombinerendah = mutableListOf<Double>()
-//        val nlistcfcombineSedang = mutableListOf<Double>()
-//        val nlistcfcombineTinggi = mutableListOf<Double>()
+        val nlistcfcombineSedang = mutableListOf<Double>()
+        val nlistcfcombineTinggi = mutableListOf<Double>()
         val Nlist_combine = mutableListOf<Double>()
-        val nlist = mutableListOf<Double>()
-        val listCF_Rendah = listOf<Double>(0.8, 0.8, 0.8, 0.8, 0.8, -1.0, 1.0,0.8 ,1.0)
+        var nlist = mutableListOf<Double>()
+        val listCF_Rendah = listOf<Double>(0.8, 0.8, 0.8, 0.8, 0.8, -1.0, 1.0, 0.8, 1.0)
         val listCF_Sedang = listOf<Double>(0.4, 0.6, 0.6, 0.6, 1.0, -1.0, 1.0, 0.6, 0.6)
         val listCF_Tinggi = listOf<Double>(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 
@@ -165,32 +191,32 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
 
         if (chb.isChecked) {
             result.append("\nTidak")
-            val A1 = 0.8
+            var A1 = 0.8
+
             nlist.add(A1)
 
-            jumlahbtg.isEnabled =false
+            jumlahbtg.isEnabled = false
             //  nlistcfcombine.add()
         }
         //jumlah batang + cf
 
         val jumlah_batang = jumlahbtg.text.toString().trim()
-        if (jumlah_batang.isBlank())
-        {
+        if (jumlah_batang.isEmpty()) {
             jumlahbtg.isEnabled = false
-        }
-        else if (jumlah_batang.isNotEmpty() ) {
+        } else if (jumlah_batang.isNotEmpty()) {
             if (jumlah_batang <= "10") {
-                val A2 = 0.4
+                var A2 = 0.4
                 nlist.add(A2)
-            } else if (jumlah_batang >= "10") {
-                val A3 = 1.0
+            }
+            if (jumlah_batang >= "10") {
+                var A3 = 1.0
                 nlist.add(A3)
             }
         }
         // ldl + CF
         val LDL = LDl.text.toString().toInt()
         if (LDL <= 75) {
-            val A4 = 0.8
+            var A4 = 0.8
             nlist.add(A4)
         } else if (LDL in 75 rangeTo (150)) {
             val A5 = 0.6
@@ -237,7 +263,7 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         } else if (dataumur in 40 rangeTo (50)) {
             val A14 = 0.6
             nlist.add(A14)
-        } else if (dataumur > 50 ) {
+        } else if (dataumur > 50) {
             val A15 = 1.0
             nlist.add(A15)
         }
@@ -293,85 +319,73 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         }
 
 
-
         val taskid = ref.push().key
-        val jawabanUser = AnswerSheets(result.toString(), jumlah_batang, LDL, Data_Tensi, result1.toString(), bmi1.toDouble(), result2.toString(), result3.toString(), dataumur,result4.toString())
+        val jawabanUser = AnswerSheets(result.toString(), jumlah_batang, LDL, Data_Tensi, result1.toString(), bmi1.toDouble(), result2.toString(), result3.toString(), dataumur, result4.toString())
         if (jawabanUser.Smoke == null) {
-            AnswerSheets("", jumlah_batang, LDL, Data_Tensi, result1.toString(), bmi1.toDouble(), result2.toString(), result3.toString(), dataumur,result4.toString())
+            AnswerSheets("", jumlah_batang, LDL, Data_Tensi, result1.toString(), bmi1.toDouble(), result2.toString(), result3.toString(), dataumur, result4.toString())
         }
         answerSheets1.add(jawabanUser)
 
+
+        Log.d("Test", nlist.toString())
         Log.d("Test", answerSheets1.toString())
-        if (nlist[0] == listCF_Rendah[0]) {
-            data = nlist[0] * listCF_Rendah[0]
-            nlistcfcombinerendah.add(data)
+
+        for (i in nlist.indices) {
+            for (j in listCF_Rendah.indices) {
+                data = nlist[i] * listCF_Rendah[j]
+                nlistcfcombinerendah.add(data)
+            }
+
+//                for (k in listCF_Sedang.indices) {
+//                    data = nlist[i] * listCF_Sedang[k]
+//                    nlistcfcombineSedang.add(data)
+//                }
+//
+
+
         }
-       if (nlist[1] == listCF_Rendah[1]) {
-            data = nlist[1] * listCF_Rendah[1]
-            nlistcfcombinerendah.add(data)
+        if (nlistcfcombinerendah != null) {
+            dataCombine = nlistcfcombinerendah[0] + nlistcfcombinerendah[1] * (1 - nlistcfcombinerendah[0])
+            dataCombine1 = nlistcfcombinerendah[1] + nlistcfcombinerendah[2] * (1 - nlistcfcombinerendah[1])
+            dataCombine2 = nlistcfcombinerendah[2] + nlistcfcombinerendah[3] * (1 - nlistcfcombinerendah[2])
+            dataCombine3 = nlistcfcombinerendah[3] + nlistcfcombinerendah[4] * (1 - nlistcfcombinerendah[3])
+            dataCombine4 = nlistcfcombinerendah[4] + nlistcfcombinerendah[5] * (1 - nlistcfcombinerendah[4])
+            dataCombine5 = nlistcfcombinerendah[5] + nlistcfcombinerendah[6] * (1 - nlistcfcombinerendah[5])
+            dataCombine6 = nlistcfcombinerendah[6] + nlistcfcombinerendah[7] * (1 - nlistcfcombinerendah[6])
+            dataCombine7 = nlistcfcombinerendah[7] + nlistcfcombinerendah[8] * (1 - nlistcfcombinerendah[7])
+            dataCombine8 = nlistcfcombinerendah[8] + nlistcfcombinerendah[0] * (1 - nlistcfcombinerendah[8])
+            val x = Cf_Class(dataCombine, dataCombine1, dataCombine2, dataCombine3, dataCombine4, dataCombine5, dataCombine6, dataCombine7, dataCombine8)
+
+            "%.4f".format( x.cf1)
+            val datalist = (x.cf1 + x.cf2 + x.cf3 + x.cf4 + x.cf5 + x.cf6 + x.cf7 + x.cf8 + x.cf9) / 9 * 100
+            datalist.roundToInt()
+            CF_list.add(x)
+            Log.d("CF_list", CF_list.toString())
+            Log.d("datalist", datalist.toString())
         }
-        if (nlist[2] == listCF_Rendah[2]) {
-            data = nlist[2] * listCF_Rendah[2]
-            nlistcfcombinerendah.add(data)
-        }
-        if (nlist[3] == listCF_Rendah[3]) {
-            data = nlist[3] * listCF_Rendah[3]
-            nlistcfcombinerendah.add(data)
-        }
-        if (nlist[4] == listCF_Rendah[4]) {
-            data = nlist[4] * listCF_Rendah[4]
-            nlistcfcombinerendah.add(data)
-        }
-        if (nlist[5] == listCF_Rendah[5]) {
-            data = nlist[5] * listCF_Rendah[5]
-            nlistcfcombinerendah.add(data)
-        }
-        if (nlist[6] == listCF_Rendah[6]) {
-            data = nlist[6] * listCF_Rendah[6]
-            nlistcfcombinerendah.add(data)
-        }
-       if (nlist[7] == listCF_Rendah[7]) {
-            data = nlist[7] * listCF_Rendah[7]
-            nlistcfcombinerendah.add(data)
-        }
-       if (nlist[8] == listCF_Rendah[8]) {
-            data = nlist[8] * listCF_Rendah[8]
-            nlistcfcombinerendah.add(data)
+        else if (nlistcfcombineSedang.indices != null) {
+            dataCombine9 = nlistcfcombineSedang[0] + nlistcfcombineSedang[1] * (1 - nlistcfcombineSedang[0])
+            dataCombine10 = nlistcfcombineSedang[1] + nlistcfcombineSedang[2] * (1 - nlistcfcombineSedang[1])
+            dataCombine11 = nlistcfcombineSedang[2] + nlistcfcombineSedang[3] * (1 - nlistcfcombineSedang[2])
+            dataCombine12 = nlistcfcombineSedang[3] + nlistcfcombineSedang[4] * (1 - nlistcfcombineSedang[3])
+            dataCombine13 = nlistcfcombineSedang[4] + nlistcfcombineSedang[5] * (1 - nlistcfcombineSedang[4])
+            dataCombine14 = nlistcfcombineSedang[5] + nlistcfcombineSedang[6] * (1 - nlistcfcombineSedang[5])
+            dataCombine15 = nlistcfcombineSedang[6] + nlistcfcombineSedang[7] * (1 - nlistcfcombineSedang[6])
+            dataCombine16 = nlistcfcombineSedang[7] + nlistcfcombineSedang[8] * (1 - nlistcfcombineSedang[7])
+            dataCombine17 = nlistcfcombineSedang[8] + nlistcfcombineSedang[0] * (1 - nlistcfcombineSedang[8])
+            val x = Cf_Class(dataCombine9, dataCombine10, dataCombine11, dataCombine12, dataCombine13, dataCombine14, dataCombine15, dataCombine16, dataCombine17)
+            val datalist = (x.cf1+ x.cf2 + x.cf3 + x.cf4 + x.cf5 + x.cf6 + x.cf7 + x.cf8 + x.cf9) / 9 * 100
+            datalist.roundToInt()
+            CF_list.add(x)
+            Log.d("CF_list", CF_list.toString())
+            Log.d("datalist", datalist.toString())
+
         }
 
-        dataCombine = nlistcfcombinerendah[0] + nlistcfcombinerendah[1] * (1 - nlistcfcombinerendah[0])
-        dataCombine1 = nlistcfcombinerendah[1] + nlistcfcombinerendah[2] * (1 - nlistcfcombinerendah[1])
-        dataCombine2 = nlistcfcombinerendah[2] + nlistcfcombinerendah[3] * (1 - nlistcfcombinerendah[2])
-        dataCombine3 = nlistcfcombinerendah[3] + nlistcfcombinerendah[4] * (1 - nlistcfcombinerendah[3])
-        dataCombine4 = nlistcfcombinerendah[4] + nlistcfcombinerendah[5] * (1 - nlistcfcombinerendah[4])
-        dataCombine5 = nlistcfcombinerendah[5] + nlistcfcombinerendah[6] * (1 - nlistcfcombinerendah[5])
-        dataCombine6 = nlistcfcombinerendah[6] + nlistcfcombinerendah[7] * (1 - nlistcfcombinerendah[6])
-        dataCombine7 = nlistcfcombinerendah[7] + nlistcfcombinerendah[8] * (1 - nlistcfcombinerendah[7])
-        dataCombine8 = nlistcfcombinerendah[8] + nlistcfcombinerendah[0] * (1 - nlistcfcombinerendah[8])
-        val x = Cf_Class(dataCombine, dataCombine1, dataCombine2, dataCombine3, dataCombine4, dataCombine5, dataCombine6, dataCombine7, dataCombine8)
-        val datalist = (x.cf1 + x.cf2 + x.cf3 + x.cf4 + x.cf5+ x.cf6+x.cf7+x.cf8 +x.cf9)/9*100
-        datalist.roundToInt()
-        CF_list.add(x)
-
-
-
-
-
-
-
-
-
-        Log.d("jawaban User ", nlist.toString())
-        Log.d("cek value user", nlist[1].toString())
-        Log.d("Test", nlistcfcombinerendah.toString())
-        Log.d("Test", CF_list.toString())
-        Log.d("Test", x.cf1.toString())
-        Log.d("Test", datalist.toString())
         /* if (taskid!=null) {
-             ref.child(taskid).setValue(jawabanUser)
-         }*/
+         ref.child(taskid).setValue(jawabanUser)
+     }*/
     }
-
 
 
     override fun onClick(v: View?) {
