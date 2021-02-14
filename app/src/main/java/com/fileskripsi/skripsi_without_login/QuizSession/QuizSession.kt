@@ -7,6 +7,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.rangeTo
 import androidx.core.util.toRange
+import androidx.core.view.isGone
 import com.fileskripsi.skripsi_without_login.*
 import com.fileskripsi.skripsi_without_login.R
 import com.google.firebase.database.*
@@ -171,6 +172,8 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         var dataCombine22: Double
         var dataCombine23: Double
         var dataCombine24: Double
+        var dataCombine25: Double
+        var dataCombine26: Double
         val result = StringBuilder()
         val result1 = StringBuilder()
         val result2 = StringBuilder()
@@ -188,27 +191,29 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
 
 
 
-
         if (chb.isChecked) {
             result.append("\nTidak")
             var A1 = 0.8
 
             nlist.add(A1)
 
-            jumlahbtg.isEnabled = false
+            jumlahbtg.isGone = true
             //  nlistcfcombine.add()
         }
+
         //jumlah batang + cf
-
-        val jumlah_batang = jumlahbtg.text.toString().toInt()
-
-        if (jumlah_batang <= 10){
-            var A2 = 0.4
-            nlist.add(A2)
-        }
-        if (jumlah_batang >= 10) {
-            var A3 = 1.0
-            nlist.add(A3)
+        val jumlah_batang = jumlahbtg.text.toString().trim()
+        if (jumlah_batang.isEmpty()) {
+            jumlahbtg.isGone = true
+        } else {
+            if (jumlah_batang.toInt() <= 10) {
+                var A2 = 0.4
+                nlist.add(A2)
+            }
+            if (jumlah_batang.toInt() >= 10) {
+                var A3 = 1.0
+                nlist.add(A3)
+            }
         }
 
 
@@ -233,7 +238,7 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         } else if (Data_Tensi in 120 rangeTo (140)) {
             val A8 = 0.6
             nlist.add(A8)
-        } else if (Data_Tensi > 140) {
+        } else if (Data_Tensi >= 140) {
             val A9 = 1.0
             nlist.add(A9)
         }
@@ -262,7 +267,7 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         } else if (dataumur in 40 rangeTo (50)) {
             val A14 = 0.6
             nlist.add(A14)
-        } else if (dataumur > 50) {
+        } else if (dataumur >= 50) {
             val A15 = 1.0
             nlist.add(A15)
         }
@@ -333,26 +338,31 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         Log.d("Test", answerSheets1.toString())
 
 
-
         for (i in nlist.indices) {
-            if (jawabanUser.Smoke =="Tidak") {
+            if (jawabanUser.Umur <= 40) {
                 for (j in listCF_Rendah.indices) {
                     data = nlist[i] * listCF_Rendah[j]
                     nlistcfcombinerendah.add(data)
                 }
             }
-            else if (jumlah_batang <= 10) {
+            if (jawabanUser.Umur in 40.rangeTo(50)) {
                 for (k in listCF_Sedang.indices) {
                     data1 = nlist[i] * listCF_Sedang[k]
                     nlistcfcombineSedang.add(data1)
                 }
             }
+             if (jawabanUser.Umur in 51.rangeTo(90) ){
+                for (l in listCF_Tinggi.indices){
+                    data2 = nlist[i]*listCF_Tinggi[l]
+                    nlistcfcombineTinggi.add(data2)
+                }
 
+            }
 
         }
         if (nlistcfcombinerendah != null) {
             for (i in nlistcfcombinerendah.indices) {
-                if (i in 0..9) {
+                if (i == 0) {
                     dataCombine = nlistcfcombinerendah[0] + nlistcfcombinerendah[1] * (1 - nlistcfcombinerendah[0])
                     dataCombine1 = nlistcfcombinerendah[1] + dataCombine * (1 - nlistcfcombinerendah[1])
                     dataCombine2 = nlistcfcombinerendah[2] + dataCombine1 * (1 - nlistcfcombinerendah[2])
@@ -368,8 +378,12 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
                     CF_list.add(x)
                     Log.d("CF_list", CF_list.toString())
                     Log.d("datalist", datalist.toString())
+//                    if (taskid != null) {
+//                        ref.child(taskid).child(datalist.to).setValue(jawabanUser)
+//                    }
                 }
             }
+
         }
         if (nlistcfcombineSedang.indices != null) {
             for (i in nlistcfcombineSedang.indices) {
@@ -385,10 +399,38 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
                     dataCombine17 = nlistcfcombineSedang[8] + dataCombine16 * (1 - nlistcfcombineSedang[8])
                     val x = Cf_Class(dataCombine9, dataCombine10, dataCombine11, dataCombine12, dataCombine13, dataCombine14, dataCombine15, dataCombine16, dataCombine17)
                     val datalist = (x.cf1 + x.cf2 + x.cf3 + x.cf4 + x.cf5 + x.cf6 + x.cf7 + x.cf8 + x.cf9) / 9 * 100
-                    datalist.roundToInt()
+                    val data = datalist.roundToInt()
                     CF_list.add(x)
                     Log.d("CF_list", CF_list.toString())
                     Log.d("datalist", datalist.toString())
+                    if (taskid != null) {
+                        ref.child(taskid).child("Hasil Cf :\n" + data.toString()).setValue(jawabanUser)
+                    }
+                }
+            }
+        }
+
+        if (nlistcfcombineTinggi.indices != null) {
+            for (i in nlistcfcombineTinggi.indices) {
+                if (i == 0) {
+                    dataCombine18 = nlistcfcombineTinggi[0] + nlistcfcombineTinggi[1] * (1 - nlistcfcombineTinggi[0])
+                    dataCombine19 = nlistcfcombineTinggi[1] + dataCombine18 * (1 - nlistcfcombineTinggi[1])
+                    dataCombine20 = nlistcfcombineTinggi[2] + dataCombine19 * (1 - nlistcfcombineTinggi[2])
+                    dataCombine21 = nlistcfcombineTinggi[3] + dataCombine20 * (1 - nlistcfcombineTinggi[3])
+                    dataCombine22 = nlistcfcombineTinggi[4] + dataCombine21 * (1 - nlistcfcombineTinggi[4])
+                    dataCombine23 = nlistcfcombineTinggi[5] + dataCombine22 * (1 - nlistcfcombineTinggi[5])
+                    dataCombine24 = nlistcfcombineTinggi[6] + dataCombine23 * (1 - nlistcfcombineTinggi[6])
+                    dataCombine25 = nlistcfcombineTinggi[7] + dataCombine24 * (1 - nlistcfcombineTinggi[7])
+                    dataCombine26 = nlistcfcombineTinggi[8] + dataCombine25 * (1 - nlistcfcombineTinggi[8])
+                    val x = Cf_Class(dataCombine18, dataCombine19, dataCombine20, dataCombine21, dataCombine22, dataCombine23, dataCombine24, dataCombine25, dataCombine26)
+                    val datalist = (x.cf1 + x.cf2 + x.cf3 + x.cf4 + x.cf5 + x.cf6 + x.cf7 + x.cf8 + x.cf9) / 9 * 100
+                    val data = datalist.roundToInt()
+                    CF_list.add(x)
+                    Log.d("CF_list", CF_list.toString())
+                    Log.d("datalist", datalist.toString())
+                    if (taskid != null) {
+                        ref.child(taskid).child(data.toString()).setValue(jawabanUser)
+                    }
                 }
             }
         }
