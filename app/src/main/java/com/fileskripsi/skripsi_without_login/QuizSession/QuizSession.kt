@@ -6,19 +6,17 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.rangeTo
-import androidx.core.util.toRange
 import androidx.core.view.isGone
+import androidx.databinding.DataBindingUtil
 import com.fileskripsi.skripsi_without_login.*
 import com.fileskripsi.skripsi_without_login.R
+import com.fileskripsi.skripsi_without_login.databinding.ActivityQuizSessionBinding
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_quiz_session.*
-import java.math.RoundingMode
-import java.text.DecimalFormat
 import kotlin.math.roundToInt
-import kotlin.math.sqrt
 
 
-class quizSession : AppCompatActivity(), View.OnClickListener {
+class quizSession : AppCompatActivity(), View.OnClickListener, AdapterView.OnItemSelectedListener {
     private lateinit var database: FirebaseDatabase
     private lateinit var jumlahbtg: EditText
     private lateinit var LDl: EditText
@@ -30,23 +28,27 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
     lateinit var genderradio1: RadioButton
     private lateinit var answerSheets1: MutableList<AnswerSheets>
     private lateinit var CF_list: MutableList<Cf_Class>
+    private lateinit var CF_list1: MutableList<Double>
     private lateinit var CF_Data: MutableList<Cf_hitung>
     private lateinit var CF_Data1: MutableList<Cf_hitung>
     private lateinit var CF_Data2: MutableList<Cf_hitung>
-    private lateinit var Cf_user: MutableList<nlist>
+    private lateinit var Cf_user: MutableList<CF_data>
     private lateinit var berat_badan: EditText
     private lateinit var tinggi_badan: EditText
     private lateinit var Data_umur: EditText
-    private lateinit var Gender: EditText
+    private lateinit var Spinners :Spinner
+    private lateinit var  binding: ActivityQuizSessionBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz_session)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_quiz_session)
         database = FirebaseDatabase.getInstance()
         question_List()
         //answer()
         // dbRef = database1?.reference!!.child("Data_Jawaban")
         answerSheets1 = mutableListOf()
         CF_list = mutableListOf()
+        CF_list1 = mutableListOf()
         CF_Data = mutableListOf()
         CF_Data1 = mutableListOf()
         CF_Data2 = mutableListOf()
@@ -56,8 +58,14 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         LDl = findViewById(R.id.ldl_score)
         Tensi = findViewById(R.id.Tensi)
         chb = findViewById(R.id.checkBox)
-
+        Spinners =findViewById(R.id.spinner)
         Submit.setOnClickListener(this)
+      //  Spinners?.onItemSelectedListener(this)
+
+
+     Cf_data()
+
+
 
 
     }
@@ -248,6 +256,7 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         val tinggi = tinggi_badan.text.toString().toDouble()
         val bmi = bb / tinggi / tinggi * 10000
         val bmi1 = bmi.roundToInt()
+        Log.d("bmi",bmi.toString())
         if (bmi1.toDouble() in 18.5 rangeTo (24.9)) {
             val A10 = 0.8
             nlist.add(A10)
@@ -331,113 +340,44 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
             AnswerSheets("", jumlah_batang, LDL, Data_Tensi,bmi1.toDouble(),dataumur,result1.toString(),  result2.toString(), result3.toString(),result4.toString())
         }
         answerSheets1.add(jawabanUser)
-
-        val X = Cf_hitung(nlist[0],nlist[1],nlist[2],nlist[3],nlist[4],nlist[5],nlist[6],nlist[7],nlist[8])
-        Log.d("Test", X.toString())
-        Log.d("Test", nlist.toString())
+//        val X = Cf_hitung(nlist[0], nlist[1], nlist[2], nlist[3], nlist[4], nlist[5], nlist[6], nlist[7], nlist[8])
+//        Log.d("Test", X.toString())
+//        Log.d("Test", nlist.toString())
         Log.d("Test", answerSheets1.toString())
 
 
-        for (i in nlist.indices) {
-            if (jawabanUser.Umur <= 40) {
-                for (j in listCF_Rendah.indices) {
-                    data = nlist[i] * listCF_Rendah[j]
-                    nlistcfcombinerendah.add(data)
-                }
-            }
-            if (jawabanUser.Umur in 40.rangeTo(50)) {
-                for (k in listCF_Sedang.indices) {
-                    data1 = nlist[i] * listCF_Sedang[k]
-                    nlistcfcombineSedang.add(data1)
-                }
-            }
-             if (jawabanUser.Umur in 51.rangeTo(90) ){
-                for (l in listCF_Tinggi.indices){
-                    data2 = nlist[i]*listCF_Tinggi[l]
-                    nlistcfcombineTinggi.add(data2)
-                }
 
-            }
 
-        }
-        if (nlistcfcombinerendah != null) {
-            for (i in nlistcfcombinerendah.indices) {
-                if (i == 0) {
-                    dataCombine = nlistcfcombinerendah[0] + nlistcfcombinerendah[1] * (1 - nlistcfcombinerendah[0])
-                    dataCombine1 = nlistcfcombinerendah[1] + dataCombine * (1 - nlistcfcombinerendah[1])
-                    dataCombine2 = nlistcfcombinerendah[2] + dataCombine1 * (1 - nlistcfcombinerendah[2])
-                    dataCombine3 = nlistcfcombinerendah[3] + dataCombine2 * (1 - nlistcfcombinerendah[3])
-                    dataCombine4 = nlistcfcombinerendah[4] + dataCombine3 * (1 - nlistcfcombinerendah[4])
-                    dataCombine5 = nlistcfcombinerendah[5] + dataCombine4 * (1 - nlistcfcombinerendah[5])
-                    dataCombine6 = nlistcfcombinerendah[6] + dataCombine5 * (1 - nlistcfcombinerendah[6])
-                    dataCombine7 = nlistcfcombinerendah[7] + dataCombine6 * (1 - nlistcfcombinerendah[7])
-                    dataCombine8 = nlistcfcombinerendah[8] + dataCombine7 * (1 - nlistcfcombinerendah[8])
-                    val x = Cf_Class(dataCombine, dataCombine1, dataCombine2, dataCombine3, dataCombine4, dataCombine5, dataCombine6, dataCombine7, dataCombine8)
-                    val datalist = (x.cf1 + x.cf2 + x.cf3 + x.cf4 + x.cf5 + x.cf6 + x.cf7 + x.cf8 + x.cf9) / 9 * 100
-                    datalist.roundToInt()
-                    CF_list.add(x)
-                    Log.d("CF_list", CF_list.toString())
-                    Log.d("datalist", datalist.toString())
-//                    if (taskid != null) {
-//                        ref.child(taskid).child(datalist.to).setValue(jawabanUser)
-//                    }
-                }
-            }
 
-        }
-        if (nlistcfcombineSedang.indices != null) {
-            for (i in nlistcfcombineSedang.indices) {
-                if (i == 0) {
-                    dataCombine9 = nlistcfcombineSedang[0] + nlistcfcombineSedang[1] * (1 - nlistcfcombineSedang[0])
-                    dataCombine10 = nlistcfcombineSedang[1] + dataCombine9 * (1 - nlistcfcombineSedang[1])
-                    dataCombine11 = nlistcfcombineSedang[2] + dataCombine10 * (1 - nlistcfcombineSedang[2])
-                    dataCombine12 = nlistcfcombineSedang[3] + dataCombine11 * (1 - nlistcfcombineSedang[3])
-                    dataCombine13 = nlistcfcombineSedang[4] + dataCombine12 * (1 - nlistcfcombineSedang[4])
-                    dataCombine14 = nlistcfcombineSedang[5] + dataCombine13 * (1 - nlistcfcombineSedang[5])
-                    dataCombine15 = nlistcfcombineSedang[6] + dataCombine14 * (1 - nlistcfcombineSedang[6])
-                    dataCombine16 = nlistcfcombineSedang[7] + dataCombine15 * (1 - nlistcfcombineSedang[7])
-                    dataCombine17 = nlistcfcombineSedang[8] + dataCombine16 * (1 - nlistcfcombineSedang[8])
-                    val x = Cf_Class(dataCombine9, dataCombine10, dataCombine11, dataCombine12, dataCombine13, dataCombine14, dataCombine15, dataCombine16, dataCombine17)
-                    val datalist = (x.cf1 + x.cf2 + x.cf3 + x.cf4 + x.cf5 + x.cf6 + x.cf7 + x.cf8 + x.cf9) / 9 * 100
-                    val data = datalist.roundToInt()
-                    CF_list.add(x)
-                    Log.d("CF_list", CF_list.toString())
-                    Log.d("datalist", datalist.toString())
-                    if (taskid != null) {
-                        ref.child(taskid).child("Hasil Cf :\n" + data.toString()).setValue(jawabanUser)
-                    }
-                }
-            }
+
+        
+    }
+
+    private fun Data_Rendah(usr_ans: String, usr_ans1: String, usr_ans2: Int, usr_ans3: Int, usr_ans4: Double, usr_ans5: Int, usr_ans6: String, usr_ans7: String, usr_ans8: String, usr_ans9: Double) {
+
+        var sb = StringBuilder()
+
+        var flag = true
+        if (usr_ans == "Tidak" && usr_ans6 == "Perempuan") {
+            flag
+        }else if (usr_ans2 <= 75 && usr_ans3 <= 120) {
+            flag
+        } else if (usr_ans4 in 18.5 rangeTo (24.9) && usr_ans5 <= 40) {
+            flag
+        } else if (usr_ans6 == "Rutin" && usr_ans7 == "Tidak") {
+            flag
+        } else if (usr_ans8 == "Tidak" && usr_ans9 <= 98.0) {
+            flag
+            Log.d("error", "anda memiliki resiko rendah  ")
+
+        }else {
+            Log.d("error", "jawaban anda kurang sesuai ")
         }
 
-        if (nlistcfcombineTinggi.indices != null) {
-            for (i in nlistcfcombineTinggi.indices) {
-                if (i == 0) {
-                    dataCombine18 = nlistcfcombineTinggi[0] + nlistcfcombineTinggi[1] * (1 - nlistcfcombineTinggi[0])
-                    dataCombine19 = nlistcfcombineTinggi[1] + dataCombine18 * (1 - nlistcfcombineTinggi[1])
-                    dataCombine20 = nlistcfcombineTinggi[2] + dataCombine19 * (1 - nlistcfcombineTinggi[2])
-                    dataCombine21 = nlistcfcombineTinggi[3] + dataCombine20 * (1 - nlistcfcombineTinggi[3])
-                    dataCombine22 = nlistcfcombineTinggi[4] + dataCombine21 * (1 - nlistcfcombineTinggi[4])
-                    dataCombine23 = nlistcfcombineTinggi[5] + dataCombine22 * (1 - nlistcfcombineTinggi[5])
-                    dataCombine24 = nlistcfcombineTinggi[6] + dataCombine23 * (1 - nlistcfcombineTinggi[6])
-                    dataCombine25 = nlistcfcombineTinggi[7] + dataCombine24 * (1 - nlistcfcombineTinggi[7])
-                    dataCombine26 = nlistcfcombineTinggi[8] + dataCombine25 * (1 - nlistcfcombineTinggi[8])
-                    val x = Cf_Class(dataCombine18, dataCombine19, dataCombine20, dataCombine21, dataCombine22, dataCombine23, dataCombine24, dataCombine25, dataCombine26)
-                    val datalist = (x.cf1 + x.cf2 + x.cf3 + x.cf4 + x.cf5 + x.cf6 + x.cf7 + x.cf8 + x.cf9) / 9 * 100
-                    val data = datalist.roundToInt()
-                    CF_list.add(x)
-                    Log.d("CF_list", CF_list.toString())
-                    Log.d("datalist", datalist.toString())
-                    if (taskid != null) {
-                        ref.child(taskid).child(data.toString()).setValue(jawabanUser)
-                    }
-                }
-            }
-        }
 
-        /* if (taskid!=null) {
-         ref.child(taskid).setValue(jawabanUser)
-     }*/
+        // Log.d("error",flag.toString())
+
+
     }
 
 
@@ -445,5 +385,62 @@ class quizSession : AppCompatActivity(), View.OnClickListener {
         answerSheets_data()
     }
 
+    private fun Cf_data(){
+        val flag = true
+        //val cfUser = listOf<Double>(0.0,0.4,0.6,0.8)
+        var nlist = mutableListOf<Double>()
+        val Cf_datauser = resources.getStringArray(R.array.CF_Data)
 
+        val arrayAdapter = ArrayAdapter(this@quizSession,android.R.layout.simple_spinner_dropdown_item,Cf_datauser)
+        spinner.adapter = arrayAdapter
+        spinner.onItemSelectedListener = this
+        spinner2.adapter = arrayAdapter
+        spinner2.onItemSelectedListener = this
+        spinner3.adapter =arrayAdapter
+        spinner3.onItemSelectedListener = this
+        spinner4.adapter =arrayAdapter
+        spinner4.onItemSelectedListener = this
+        spinner5.adapter =arrayAdapter
+        spinner5.onItemSelectedListener = this
+        spinner6.adapter =arrayAdapter
+        spinner6.onItemSelectedListener = this
+        spinner7.adapter =arrayAdapter
+        spinner7.onItemSelectedListener = this
+        spinner8.adapter =arrayAdapter
+        spinner8.onItemSelectedListener = this
+        spinner9.adapter =arrayAdapter
+        spinner9.onItemSelectedListener = this
+
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        val cf1 = binding?.spinner?.selectedItem.toString()
+        val cf2 = binding?.spinner2?.selectedItem.toString()
+        val cf3 = binding?.spinner3?.selectedItem.toString()
+        val cf4 = binding?.spinner4?.selectedItem.toString()
+        val cf5 = binding?.spinner5?.selectedItem.toString()
+        val cf6 = binding?.spinner6?.selectedItem.toString()
+        val cf7 = binding?.spinner7?.selectedItem.toString()
+        val cf8 = binding?.spinner8?.selectedItem.toString()
+        val cf9 = binding?.spinner9?.selectedItem.toString()
+        cfCount(cf1.toDouble(),cf2.toDouble(),cf3.toDouble(),cf4.toDouble(),cf5.toDouble(),cf6.toDouble(),cf7.toDouble(),cf8.toDouble(),cf9.toDouble())
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+    }
+
+    private fun cfCount(cf1:Double,cf2: Double,cf3:Double,cf4: Double,cf5:Double,cf6: Double,cf7:Double,cf8: Double,cf9: Double){
+        val x = CF_Val.Cf_data(cf1,cf2,cf3, cf4, cf5, cf6, cf7, cf8, cf9)
+        val comp = x.component1()
+        Log.d("Check Data1",x.toString())
+       // Log.d("Check CF ", CF_Val.database().toString())
+
+
+    }
 }
+
+
+
+
+
