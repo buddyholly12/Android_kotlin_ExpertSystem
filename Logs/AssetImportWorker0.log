@@ -171,3 +171,11 @@ System memory in use after: 53,2 MB.
 Unloading 5 unused Assets to reduce memory usage. Loaded Objects now: 1589.
 Total: 3,354709 ms (FindLiveObjects: 0,192922 ms CreateObjectMapping: 0,038602 ms MarkObjects: 3,034417 ms  DeleteObjects: 0,086142 ms)
 
+========================================================================
+Received Import Request.
+  Time since last request: 1578,478447 seconds.
+  path: Assets/LowPolySoldiers_demo/animation/LP_DesertHousePhase11.fbx
+  artifactKey: Guid(b13a5c533ff8ea9bb8de56e93b9fcc63) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/LowPolySoldiers_demo/animation/LP_DesertHousePhase11.fbx using Guid(b13a5c533ff8ea9bb8de56e93b9fcc63) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '982686720557dd867c644d80cadf6fd0') in 0,282106 seconds
+  Import took 0,285333 seconds .
+
